@@ -1,7 +1,7 @@
 from pathlib import Path
 from decouple import config as env
 import dj_database_url
-
+import os
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -71,13 +71,25 @@ WSGI_APPLICATION = 'config.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-DATABASES = {
-    "default": dj_database_url.parse(
-        env("DATABASE_URL", default="postgres://postgres:postgres@127.0.0.1:5432/hrpayroll"),
-        conn_max_age=60,
-    )
-}
 
+if env('HOST_IS_REMOTE', default=0) == "1":
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env("DB_NAME", "wo ho get the name of the database"),
+            "USER": env("DB_USER", "he he this is for dummies"),
+            "PASSWORD": env("DB_PASSWORD", "idk_my_password"),
+            "HOST": env("DB_HOST", "you are a dummy looking at my ip"),
+            "PORT": env("DB_PORT", "this port is a dum port"),
+        }
+    }
+else: 
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
