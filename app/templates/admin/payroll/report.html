@@ -1,0 +1,59 @@
+{% extends "admin/base_site.html" %}
+{% load money %}
+{% block content %}
+<h1>Payroll Report — {{ run.year }} / {{ run.month }}</h1>
+
+<div style="margin:10px 0 16px 0;">
+  <a class="button" href="#" onclick="window.print();return false;">Print</a>
+  <a class="button" href="/admin/payroll/payrollrun/{{ run.id }}/change/">Back</a>
+</div>
+
+<div style="overflow:auto; border:1px solid #ddd; border-radius:10px;">
+  <table style="border-collapse:collapse; width:100%; min-width:1200px;">
+    <thead>
+      <tr>
+        <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Employee</th>
+        <th style="padding:8px; border-bottom:1px solid #ddd;">Base</th>
+        <th style="padding:8px; border-bottom:1px solid #ddd;">Attendance Deduction</th>
+        <th style="padding:8px; border-bottom:1px solid #ddd;">Salary</th>
+        <th style="padding:8px; border-bottom:1px solid #ddd;">Bonus</th>
+        <th style="padding:8px; border-bottom:1px solid #ddd;">Overtime</th>
+        <th style="padding:8px; border-bottom:1px solid #ddd;">Total</th>
+        <th style="padding:8px; border-bottom:1px solid #ddd;">Tax</th>
+        <th style="padding:8px; border-bottom:1px solid #ddd;">Prepaid</th>
+        <th style="padding:8px; border-bottom:1px solid #ddd;">Amount to Pay</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for l in lines %}
+      <tr>
+        <td style="padding:8px; border-bottom:1px solid #eee;">{{ l.employee }}</td>
+        <td style="padding:8px; border-bottom:1px solid #eee;">{{ l.base_salary |ceil2}}</td>
+        <td style="padding:8px; border-bottom:1px solid #eee;">{{ l.attendance_deduction|ceil2 }}</td>
+        <td style="padding:8px; border-bottom:1px solid #eee;">{{ l.salary|ceil2 }}</td>
+        <td style="padding:8px; border-bottom:1px solid #eee;">{{ l.bonus|ceil2 }}</td>
+        <td style="padding:8px; border-bottom:1px solid #eee;">{{ l.overtime|ceil2 }}</td>
+        <td style="padding:8px; border-bottom:1px solid #eee;">{{ l.total|ceil2 }}</td>
+        <td style="padding:8px; border-bottom:1px solid #eee;">{{ l.tax|ceil2 }}</td>
+        <td style="padding:8px; border-bottom:1px solid #eee;">{{ l.prepaid }}</td>
+        <td style="padding:8px; border-bottom:1px solid #eee; font-weight:600;">{{ l.amount_to_pay|ceil2 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr>
+        <th style="text-align:left; padding:8px; border-top:2px solid #ddd;">Totals</th>
+        <th style="padding:8px; border-top:2px solid #ddd;">{{ totals.base_salary }}</th>
+        <th style="padding:8px; border-top:2px solid #ddd;">{{ totals.attendance_deduction }}</th>
+        <th style="padding:8px; border-top:2px solid #ddd;">{{ totals.salary }}</th>
+        <th style="padding:8px; border-top:2px solid #ddd;">{{ totals.bonus }}</th>
+        <th style="padding:8px; border-top:2px solid #ddd;">{{ totals.overtime }}</th>
+        <th style="padding:8px; border-top:2px solid #ddd;">{{ totals.total }}</th>
+        <th style="padding:8px; border-top:2px solid #ddd;">{{ totals.tax }}</th>
+        <th style="padding:8px; border-top:2px solid #ddd;">{{ totals.prepaid }}</th>
+        <th style="padding:8px; border-top:2px solid #ddd;">{{ totals.amount_to_pay }}</th>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+{% endblock %}
