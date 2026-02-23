@@ -2,6 +2,9 @@
 
 {% block object-tools-items %}
   <li>
+    <a href="{% url 'admin:overtime_bulk' %}" class="addlink">Bulk Overtime</a>
+  </li>
+  <li>
     <a href="export/?jy=1404&jm=12" class="addlink">Export Overtime (Jalali Month)</a>
   </li>
   {{ block.super }}

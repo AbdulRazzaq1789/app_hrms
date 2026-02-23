@@ -12,9 +12,11 @@ from core.jalali import jalali_month_range, jalali_day_to_gregorian, format_greg
 from django.http import HttpResponse
 from .exports import build_attendance_xlsx
 from employees.models import Employee
+from jalali_date.admin import ModelAdminJalaliMixin
+from core.admin import JalaliDateAdminMixin
 
 @admin.register(AttendanceDay)
-class AttendanceDayAdmin(admin.ModelAdmin):
+class AttendanceDayAdmin(ModelAdminJalaliMixin, JalaliDateAdminMixin, admin.ModelAdmin):
     list_display = ("jalali_date", "employee", "status", "note")
     def jalali_date(self, obj):
         return format_gregorian_to_jalali_with_day(obj.date)
@@ -117,16 +119,7 @@ class AttendanceDayAdmin(admin.ModelAdmin):
                                 obj.delete()
                             continue
 
-                        if val not in (AttendanceDay.Status.ABSENT, AttendanceDay.Status.SHIFT_OFF, AttendanceDay.Status.HOLIDAY):
-                            continue
-
-                        if obj:
-                            obj.status = val
-                            obj.save(update_fields=["status"])
-                        else:
-                            AttendanceDay.objects.create(employee=emp, date=g_date, status=val)
-
-                        if val not in (AttendanceDay.Status.ABSENT, AttendanceDay.Status.SHIFT_OFF, AttendanceDay.Status.HOLIDAY):
+                        if val not in (AttendanceDay.Status.ABSENT, AttendanceDay.Status.SHIFT_OFF, AttendanceDay.Status.HOLIDAY, AttendanceDay.Status.LEAVE):
                             continue
 
                         if obj:

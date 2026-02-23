@@ -1,0 +1,92 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Bulk Overtime (Exceptions Only)</h1>
+
+<form method="get" style="margin-bottom:16px;">
+  <fieldset style="padding:12px;border:1px solid #ddd;border-radius:10px;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:end;">
+      <div>
+        <label>Jalali Year</label><br />
+        <input type="number" name="jy" value="{{ jy }}" style="width:140px" />
+      </div>
+      <div>
+        <label>Jalali Month</label><br />
+        <input type="number" min="1" max="12" name="jm" value="{{ jm }}" style="width:140px" />
+      </div>
+      <div>
+        <label>Department</label><br />
+        <select name="department_id" style="width:220px">
+          <option value="">All</option>
+          {% for d in departments %}
+            <option value="{{ d.id }}" {% if department_id|stringformat:"s" == d.id|stringformat:"s" %}selected{% endif %}>
+              {{ d.name }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <button class="button" type="submit">Load</button>
+    </div>
+
+    <p style="margin:10px 0 0 0; color:#666;">
+      Blank = no overtime (no record saved). Enter hours only when overtime exists.
+    </p>
+  </fieldset>
+</form>
+
+{% if loaded %}
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="jy" value="{{ jy }}">
+  <input type="hidden" name="jm" value="{{ jm }}">
+  <input type="hidden" name="department_id" value="{{ department_id }}">
+
+  <div style="overflow:auto; border:1px solid #ddd; border-radius:10px;">
+    <table style="border-collapse:collapse; width:max-content; min-width:100%;">
+      <thead>
+        <tr>
+          <th style="position:sticky; left:0; background:#fff; padding:8px; border-bottom:1px solid #ddd; border-right:1px solid #ddd;">
+            Employee
+          </th>
+          {% for day in days %}
+            <th style="padding:6px 8px; border-bottom:1px solid #ddd; text-align:center;">
+              {{ day }}
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in rows %}
+          <tr>
+            <td style="position:sticky; left:0; background:#fff; padding:8px; border-right:1px solid #ddd; white-space:nowrap;">
+              {{ row.employee }}
+            </td>
+
+            {% for cell in row.cells %}
+              <td style="padding:4px; border-bottom:1px solid #eee; text-align:center;">
+                <input
+                  type="number"
+                  step="0.25"
+                  min="0"
+                  name="ot_{{ row.employee.id }}_{{ cell.day }}"
+                  value="{{ cell.value }}"
+                  style="width:90px;text-align:center;"
+                  placeholder=""
+                />
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div style="margin-top:14px;">
+    <button class="button default" type="submit" name="action" value="save">Save Overtime</button>
+  </div>
+</form>
+{% endif %}
+
+{% endblock %}
