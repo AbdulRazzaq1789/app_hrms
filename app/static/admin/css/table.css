@@ -1,0 +1,11 @@
+.table-wrapper {
+    height: 75vh;
+    overflow: auto;
+}
+.table {
+    position: relative;
+}
+.table th {
+    position: sticky;
+    top: 0;
+}

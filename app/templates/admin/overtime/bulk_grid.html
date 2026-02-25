@@ -1,6 +1,10 @@
 {% extends "admin/base_site.html" %}
 {% load static %}
 
+{% block extrastyle %}
+  <link rel="stylesheet" href="{% static 'admin/css/table.css' %}">
+{% endblock %}
+
 {% block content %}
 <h1>Bulk Overtime (Exceptions Only)</h1>
 
@@ -43,8 +47,8 @@
   <input type="hidden" name="jm" value="{{ jm }}">
   <input type="hidden" name="department_id" value="{{ department_id }}">
 
-  <div style="overflow:auto; border:1px solid #ddd; border-radius:10px;">
-    <table style="border-collapse:collapse; width:max-content; min-width:100%;">
+  <div class="table-wrapper" style="overflow:auto; border:1px solid #ddd; border-radius:10px;">
+    <table class="table" style="border-collapse:collapse; width:max-content; min-width:100%;">
       <thead>
         <tr>
           <th style="position:sticky; left:0; background:#fff; padding:8px; border-bottom:1px solid #ddd; border-right:1px solid #ddd;">

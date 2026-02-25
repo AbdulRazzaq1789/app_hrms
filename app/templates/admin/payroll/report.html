@@ -1,5 +1,10 @@
 {% extends "admin/base_site.html" %}
 {% load money %}
+
+{% load static %}
+{% block extrastyle %}
+  <link rel="stylesheet" href="{% static 'admin/css/table.css' %}">
+{% endblock %}
 {% block content %}
 <h1>Payroll Report — {{ run.year }} / {{ run.month }}</h1>
 
@@ -8,8 +13,8 @@
   <a class="button" href="/admin/payroll/payrollrun/{{ run.id }}/change/">Back</a>
 </div>
 
-<div style="overflow:auto; border:1px solid #ddd; border-radius:10px;">
-  <table style="border-collapse:collapse; width:100%; min-width:1200px;">
+<div class="table-wrapper" style=" border:1px solid #ddd; border-radius:10px;">
+  <table class="table" style="border-collapse:collapse; width:100%; min-width:1200px;">
     <thead>
       <tr>
         <th style="text-align:left; padding:8px; border-bottom:1px solid #ddd;">Employee</th>
