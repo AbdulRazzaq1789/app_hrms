@@ -76,9 +76,10 @@ class PayrollRunAdmin(admin.ModelAdmin):
 
     def export_view(self, request, run_id: int):
         run = get_object_or_404(PayrollRun, id=run_id)
-        wb = build_payroll_xlsx(run)
+        order_by = (request.GET.get("order_by") or "name").strip().lower()
+        wb = build_payroll_xlsx(run, order_by=order_by)
 
-        filename = f"payroll_{run.year}_{run.month:02d}.xlsx"
+        filename = f"payroll_{run.year}_{run.month:02d}_{order_by}.xlsx"
         response = HttpResponse(
             content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )

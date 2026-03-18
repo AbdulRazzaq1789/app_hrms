@@ -45,11 +45,13 @@ class AttendanceDayAdmin(ModelAdminJalaliMixin, JalaliDateAdminMixin, admin.Mode
         emp_qs = Employee.objects.filter(status=Employee.Status.WORKING).select_related("department", "position")
         if department_id:
             emp_qs = emp_qs.filter(department_id=department_id)
-        employees = list(emp_qs.order_by("first_name", "father_name"))
+        order_by = (request.GET.get("order_by") or "name").strip().lower()
+        employee_ordering = ("id", "first_name", "father_name") if order_by == "id" else ("first_name", "father_name", "id")
+        employees = list(emp_qs.order_by(*employee_ordering))
 
         wb = build_attendance_xlsx(jy, jm, employees)
 
-        filename = f"attendance_{jy}_{jm:02d}.xlsx"
+        filename = f"attendance_{jy}_{jm:02d}_{order_by}.xlsx"
         response = HttpResponse(
             content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )

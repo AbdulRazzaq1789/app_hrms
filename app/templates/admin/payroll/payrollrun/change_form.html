@@ -3,7 +3,8 @@
 {% block object-tools-items %}
   {% if original %}
     <li><a href="{% url 'admin:payroll_report' original.id %}" class="viewlink">Report</a></li>
-    <li><a href="{% url 'admin:payroll_export' original.id %}" class="viewlink">Export Excel</a></li>
+    <li><a href="{% url 'admin:payroll_export' original.id %}?order_by=name" class="viewlink">Export Excel (Name)</a></li>
+    <li><a href="{% url 'admin:payroll_export' original.id %}?order_by=id" class="viewlink">Export Excel (ID)</a></li>
   {% endif %}
   {{ block.super }}
 {% endblock %}

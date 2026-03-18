@@ -4,8 +4,35 @@
   <li>
     <a href="{% url 'admin:overtime_bulk' %}" class="addlink">Bulk Overtime</a>
   </li>
-  <li>
-    <a href="export/?jy=1404&jm=12" class="addlink">Export Overtime (Jalali Month)</a>
-  </li>
   {{ block.super }}
+{% endblock %}
+
+{% block content_title %}
+  {{ block.super }}
+  <div style="margin: 12px 0 16px; padding: 12px; background: var(--darkened-bg, #f8f8f8); border-radius: 8px;">
+    <form method="get" action="export/" style="display:flex; flex-wrap:wrap; gap:10px; align-items:end;">
+      <div>
+        <label for="overtime-export-jy"><strong>Jalali Year</strong></label><br>
+        <input id="overtime-export-jy" type="number" name="jy" value="{{ request.GET.jy|default:1404 }}" min="1300" max="1600">
+      </div>
+      <div>
+        <label for="overtime-export-jm"><strong>Jalali Month</strong></label><br>
+        <input id="overtime-export-jm" type="number" name="jm" value="{{ request.GET.jm|default:1 }}" min="1" max="12">
+      </div>
+      <div>
+        <label for="overtime-export-department"><strong>Department ID</strong></label><br>
+        <input id="overtime-export-department" type="text" name="department_id" value="{{ request.GET.department_id|default:'' }}">
+      </div>
+      <div>
+        <label for="overtime-export-order"><strong>Order By</strong></label><br>
+        <select id="overtime-export-order" name="order_by">
+          <option value="name">Name</option>
+          <option value="id" {% if request.GET.order_by == 'id' %}selected{% endif %}>ID</option>
+        </select>
+      </div>
+      <div>
+        <button type="submit" class="button">Export Overtime</button>
+      </div>
+    </form>
+  </div>
 {% endblock %}
