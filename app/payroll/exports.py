@@ -261,7 +261,7 @@ def _build_format_1_sheet(wb, lines):
     ws["F1"] = "وضع شده"
     ws["I1"] = "استحقاق تنخوا و اضافه كاري"
     ws["L1"] = "اصل معاش"
-    ws["M1"] = "Department - Position"
+    ws["M1"] = "وظیفه"
     ws["N1"] = "شـــــهــرت"
     ws["P1"] = "شماره"
 
@@ -283,7 +283,7 @@ def _build_format_1_sheet(wb, lines):
         payroll_row = idx - 1
         attendance_row = idx - 1
         emp = line.employee
-        dept_position = f"{emp.department.name} - {emp.position.name}" if emp.department_id and emp.position_id else ""
+        dept_position = f"{emp.position.name}" if emp.department_id and emp.position_id else ""
 
         ws[f"B{idx}"] = f"={attendance_ws}!AG{attendance_row}"
         ws[f"C{idx}"] = f"={attendance_ws}!AH{attendance_row}"
