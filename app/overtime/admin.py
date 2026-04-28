@@ -12,14 +12,18 @@ from .exports import build_overtime_xlsx
 
 from employees.models import Employee
 from org.models import Department
-from core.jalali import jalali_month_range, jalali_day_to_gregorian
+from core.jalali import jalali_month_range, jalali_day_to_gregorian, format_gregorian_to_jalali_with_day, format_gregorian_to_jalali
 from .models import OvertimeEntry  # adjust name
 
 @admin.register(OvertimeEntry)
 class OvertimeEntryAdmin(ModelAdminJalaliMixin, JalaliDateAdminMixin, admin.ModelAdmin):
-    list_display = ("employee", "date", "hours", "note")
+
+    list_display = ("employee", "jalali_date", "hours", "note")
     list_filter = ("date",)
     search_fields = ("employee__first_name", "employee__father_name", "note")
+    def jalali_date(self, obj):
+        return format_gregorian_to_jalali(obj.date)
+    jalali_date.short_description = "Date"
 
     change_list_template = "admin/overtime/overtime_changelist.html"
 

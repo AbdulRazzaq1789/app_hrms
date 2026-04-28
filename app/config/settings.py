@@ -91,6 +91,9 @@ else:
         }
     }
 
+# Set Max Upload Limit for Bulk Entries
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
